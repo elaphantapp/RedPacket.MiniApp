@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="./css/reset.css">
+    <title></title>
+</head>
+<style>
+    [v-cloak] {
+        display: none;
+    }
+    
+    ul {
+        padding: 0px;
+        margin: 0px;
+        list-style: none;
+    }
+    
+    li {
+        padding: 0px;
+        margin: 0px;
+        list-style: none;
+    }
+    
+    body {
+        background: #eee;
+        height: 100%;
+    }
+    
+    .page {
+        width: 340px;
+        margin: 0 auto;
+        margin-top: 40px;
+        height: 100%;
+    }
+    
+    .page .packet {
+        width: 340px;
+        margin: 0 auto;
+        position: relative;
+        border-radius: 4px;
+        overflow: hidden;
+        padding-bottom: 80px;
+        background-color: #FFF;
+        height: 100%;
+    }
+    
+    .page .packet .hd {
+        width: 340px;
+        height: 180px;
+        background-color: #FFF;
+        margin: 0 auto;
+        background-size: 100%;
+        margin: 0 auto;
+    }
+    
+    .page .packet .hd .bg {
+        width: 100%;
+        height: 100%;
+        background: #D70000;
+        border-radius: 0 0 50% 50%;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    }
+    
+    .page .packet .hd .userInfo {
+        position: absolute;
+        top: 16px;
+        left: 0;
+        width: 100%;
+    }
+    
+    .page .packet .hd .userInfo .name {
+        display: block;
+        padding: .4rem .32rem .1rem .32rem;
+        font-size: 14px;
+        color: #fff;
+        text-align: center;
+    }
+    
+    .page .packet .hd .userInfo .name em {
+        word-break: break-all;
+    }
+    
+    .page .packet .hd .userInfo .note {
+        min-width: 100%;
+        float: left;
+        padding: 0 .32rem .3rem .32rem;
+        font-size: 16px;
+        color: #fff;
+        letter-spacing: .02rem;
+        text-align: center;
+        white-space: nowrap;
+    }
+    
+    .page .packet .hd .golden {
+        position: absolute;
+        left: 119px;
+        top: 118px;
+        width: 88px;
+        height: 88px;
+        background: #D70000 url(./images/golden.png) no-repeat center center;
+        background-size: 88px 88px;
+        border-radius: 50%;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+        z-index: 1;
+    }
+    
+    .page .packet .con {
+        padding: 0 10px;
+        margin-top: 95px;
+    }
+    
+    .details {
+        margin-top: 18px;
+        text-align: center;
+        font-size: 14px;
+        color: red;
+        cursor: pointer;
+    }
+    
+    .address {
+        margin-top: 20px;
+        text-align: center;
+        border: 1px solid #bcbcbc;
+    }
+    
+    .address input {
+        height: 30px;
+        width: 290px;
+        padding-left: 5px;
+        border: 0;
+        outline: 0;
+    }
+    
+    .button {
+        width: 300px;
+        margin: 0 auto;
+        margin-top: 18px;
+        background: #D70000;
+        display: block;
+        height: 50px;
+        line-height: 50px;
+        font-size: 16px;
+        text-align: center;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .toast {
+        position: fixed;
+        z-index: 2000;
+        left: 50%;
+        top: 25%;
+        transition: all .5s;
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        -moz-transform: translateX(-50%) translateY(-50%);
+        -ms-transform: translateX(-50%) translateY(-50%);
+        -o-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        text-align: center;
+        border-radius: 5px;
+        color: #FFF;
+        background: rgba(17, 17, 17, 0.7);
+        /* height: 45px; */
+        width: 100%;
+        overflow: auto;
+        padding: 5px 0px;
+    }
+    
+    .spinner {
+        display: block;
+        margin: 100px auto 0;
+        width: 150px;
+        text-align: center;
+    }
+    
+    .spinner>div {
+        width: 30px;
+        height: 30px;
+        background-color: #67CF22;
+        border-radius: 100%;
+        display: inline-block;
+        -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+        animation: bouncedelay 1.4s infinite ease-in-out;
+        /* Prevent first frame from flickering when animation starts */
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+    }
+    
+    .spinner .bounce1 {
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s;
+    }
+    
+    .spinner .bounce2 {
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s;
+    }
+    
+    @-webkit-keyframes bouncedelay {
+        0%,
+        80%,
+        100% {
+            -webkit-transform: scale(0.0)
+        }
+        40% {
+            -webkit-transform: scale(1.0)
+        }
+    }
+    
+    @keyframes bouncedelay {
+        0%,
+        80%,
+        100% {
+            transform: scale(0.0);
+            -webkit-transform: scale(0.0);
+        }
+        40% {
+            transform: scale(1.0);
+            -webkit-transform: scale(1.0);
+        }
+    }
+</style>
+
+<body>
+    <div id="app" v-cloak>
+        <div class="spinner" v-if="loading">
+
+            <div class="bounce1"></div>
+
+            <div class="bounce2"></div>
+
+            <div class="bounce3"></div>
+        </div>
+        <div class="toast" v-show="toastShow">
+            {{toastText}}
+        </div>
+        <div class="page" v-if="!loading">
+            <div class="packet">
+                <div class="hd">
+                    <div class="bg"></div>
+                    <div class="userInfo ">
+                        <span class="name">
+                            {{curLangule['key5']}}
+                            <em>{{nickName}}</em>
+                        </span>
+                        <p class="j-note note" v-if="packetBlessing===''">{{curLangule['key4']}}</p>
+                        <p class="j-note note" v-if="packetBlessing!=''">{{packetBlessing}}</p>
+                        <span class="golden"></span>
+                    </div>
+                </div>
+
+                <div class="con">
+                    <div class="address" v-if="isShow"><input :placeholder="curLangule['key8']" v-model="address" /></div>
+                    <p style="color: #bcbcbc;font-size: 12px;width:300px;margin:0 auto;margin-top: 40px;">{{curLangule['key11']}}</p>
+                    <div v-if="!isShow" style="height: 30px;"></div>
+                    <div v-if="isShow" style="width: 305px;margin-top:53px;text-align:center;color: red;cursor: pointer;font-size: 14px;" @click="getElephant"><span style="border-bottom: 1px solid red;padding-bottom: 2px;">{{curLangule['key9']}} >></span></div>
+                    <div class="button" @click="grap">{{curLangule['key3']}}</div>
+                    <div class="details"><span style="border-bottom: 1px solid red;padding-bottom: 2px;" @click="details">{{curLangule['key7']}} >></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="./js/vue.min.js"></script>
+<script src="./js/lodash.min.js"></script>
+<script src="./js/vue-clipboard.min.js"></script>
+<script src="./js/jquery-3.2.1.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            loading: true,
+            zh: {
+                key: '红包',
+                key3: '领取',
+                key4: '恭喜发财，大吉大利',
+                key5: '红包来自',
+                key6: '复制成功',
+                key7: '查看详情',
+                key8: '输入ELA地址',
+                key9: '用大象钱包抢',
+                key10: '红包支付还未成功，请稍后再试。',
+                error1: '地址不合法',
+                key11: '系统会检测ELA地址和设备终端，用户只能领取一次红包。',
+            },
+            en: {
+                key: 'Red packet',
+                key3: 'Get',
+                key4: 'Congratulations on making a fortune',
+                key5: 'Red Packet From',
+                key6: 'Copy Success',
+                key7: 'View Details',
+                key8: 'Input ELA address',
+                key9: 'Get By Elephant',
+                key10: 'Red Packet payment has not been successful, please try again later.',
+                error1: 'Illegal address',
+                key11: 'The system will detect the ELA address and device terminal, and the user can only get the red packet once.',
+            },
+            curLangule: {},
+            curLanguleKey: 'zh',
+            toastText: '',
+            toastShow: false,
+            schemeConfig: {
+                "AppID": "8FD01FF48C37DC11B53DF6E4BDB07924A3BF7034AEC2E0CC0CCDAC253F1AD006492F0E809E1274C1F20A819E438C8A4FDA99CD34A9E4B210337D6F26203A7B9D",
+                "AppName": encodeURIComponent("Red Packet"),
+                "DID": "inS5F9nZ8nV2v5w2tGL8PbNbgwXU1Ry9uG",
+                "PublicKey": "03DD46B1E064A0BD0BA9A0FEFE58E4703EB44189D137462F4FA5181EE42A8F61AE",
+                "RandomNumber": "123456789",
+                "RequestInfo": "ELAAddress,Nickname",
+                "ReturnUrl": "", //跳转到 exchange_start.html        
+            },
+            payAddress: '',
+            payBalance: 0,
+            nickname: '',
+            url: '',
+            hash: '',
+            isShow: false,
+            address: "",
+            baseUrl: 'https://redpacket.elastos.org',
+            packetHash: '',
+            browserType: '',
+            name: "",
+            desc: '',
+            packetBlessing: ''
+        },
+        methods: {
+            isAddressValid(address) {
+                var r = false;
+                if (address.length != 34) {
+                    return r
+                }
+
+                r = (address[0] == 'E' || address[0] == 'i' ||
+                    address[0] == '8' || address[0] == 'X' || address[0] == 'D')
+
+                if (r == false && address === "1111111111111111111114oLvT2") {
+                    r = true;
+                }
+
+                return r;
+            },
+            getElephant() {
+                if (this.desc === 'Not_ready') {
+                    this.toast(this.curLangule['key10']);
+                    return false;
+                }
+                let eleUrl = this.geneElephantPro();
+                let callUrl = "https://launch.elaphant.app?appName=Red Packet&appTitle=Red Packet&autoRedirect=True&redirectURL=" + encodeURIComponent(eleUrl);
+                location.href = callUrl;
+            },
+            getRedDetails() {
+                let url = this.baseUrl + "/api/v1/packet/peek?packet_hash=" + this.packetHash + "&show_receivers=true";
+                this.getAjax(url).then((res) => {
+                    if (res.status === 200) {
+                        this.loading = false;
+                        let data = res['result'];
+                        this.desc = data['desc'];
+                        this.packetBlessing = data['packet_detail']['packet_blessing'] || '';
+                        this.nickName = data['packet_detail']['packet_creator'];
+                    }
+                }).catch(() => {
+                    this.loading = false;
+                });
+            },
+            getUrl() {
+                //获取主机地址
+                var localhostPaht = window.location.protocol + "//" + window.location.host;
+                return localhostPaht;
+            },
+            geneElephantPro() {
+                var baseUrl = this.getUrl();
+                if (baseUrl === "file://") {
+                    baseUrl = 'http://dev1.elapps.net';
+                }
+                this.schemeConfig['ReturnUrl'] = baseUrl + '/loading.html?packHash=' + this.packetHash + '&browser=' + this.browserType;
+                var url = "elaphant://identity?";
+                _.forEach(this.schemeConfig, function(val, key, index) {
+                    if (key === 'ReturnUrl' || key === "RequestInfo") {
+                        val = encodeURIComponent(val);
+                    }
+                    url += key + '=' + val + '&';
+                });
+
+                return url.substring(0, url.length - 1);
+            },
+            details() {
+                location.href = "./redPacket-details.html?packHash=" + this.packetHash + "&browser=" + this.browserType;
+            },
+            grap() {
+                if (this.desc === 'Not_ready') {
+                    this.toast(this.curLangule['key10']);
+                    return false;
+                }
+                if (this.browserType === 'trinity') {
+                    if (this.address === "") {
+                        this.toast(this.curLangule['key8']);
+                        return false;
+                    }
+                    if (!this.isAddressValid(this.address)) {
+                        this.toast(this.curLangule['error1']);
+                        return false;
+                    }
+                    location.href = '/loading.html?packHash=' + this.packetHash + '&browser=' + this.browserType + "&address=" + this.address;
+                } else {
+                    this.getElephant();
+                }
+
+            },
+            getAjax(url) {
+                return new Promise((resovle, reject) => {
+                    $.ajax({
+                        url: url,
+                        dataType: 'json',
+                        type: 'GET',
+                        success: function(data) { //成功回调函数
+                            resovle(data);
+                        },
+                        error: function(err) { //失败回调函数
+                            reject(err);
+                        }
+                    });
+                });
+            },
+            doCopy(url) {
+                var v = this;
+                this.$copyText(url).then(function(e) {
+                    v.toast(v.curLangule['key6']);
+                }, function(e) {})
+            },
+            toast(str) {
+                var v = this;
+                v.toastText = str
+                v.toastShow = true
+                setTimeout(function() {
+                    v.toastShow = false;
+                }, 1500)
+            },
+            getLanugle: function() {
+                this.curLangule = this.en;
+                this.curLanguleKey = 'en';
+                var JsSrc = (navigator.language || navigator.browserLanguage).toLowerCase();
+                if (JsSrc.indexOf('zh') >= 0) {
+                    // 假如浏览器语言是中文
+                    this.curLanguleKey = 'zh';
+                    this.curLangule = this.zh;
+                } else if (JsSrc.indexOf('en') >= 0) {
+                    this.curLangule = this.en;
+                    this.curLanguleKey = 'en';
+                } else {
+                    // 假如浏览器语言是其它语言
+                    this.curLangule = this.en;
+                    this.curLanguleKey = 'en';
+                }
+            },
+            GetQueryString(name) {　　　
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                var r = window.location.search.substr(1).match(reg);　　　
+                if (r != null) return (r[2]);　　　
+                return null;
+            }
+        },
+        created() {
+            this.packetHash = this.GetQueryString("packHash") || "";
+            this.browserType = this.GetQueryString("browser") || "";
+            //this.nickname = this.GetQueryString("nickName") || "";
+            this.getRedDetails();
+            if (this.browserType === "trinity") {
+                this.isShow = true;
+            } else {
+                this.isShow = false;
+            }
+        },
+        mounted() {
+            this.getLanugle();
+            document.title = this.curLangule["key"];
+        }
+    });
+</script>
+
+</html>

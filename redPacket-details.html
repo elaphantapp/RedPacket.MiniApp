@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="./css/reset.css">
+    <title></title>
+</head>
+<style>
+    [v-cloak] {
+        display: none;
+    }
+    
+    ul {
+        padding: 0px;
+        margin: 0px;
+        list-style: none;
+    }
+    
+    li {
+        padding: 0px;
+        margin: 0px;
+        list-style: none;
+    }
+    
+    body {
+        background: #eee;
+        height: 100%;
+    }
+    
+    .page {
+        width: 340px;
+        margin: 0 auto;
+        margin-top: 40px;
+        height: 100%;
+        background-color: #FFF;
+        padding-top: 20px;
+        padding-bottom: 40px;
+        padding-left: 10px;
+    }
+    
+    .page .receivedWrap {
+        position: relative;
+    }
+    
+    .receivedWrap:before {
+        content: '';
+        position: absolute;
+        top: -26px;
+        left: 0;
+        width: 100%;
+        height: 166px;
+        background: url(./images/fireworks.png) no-repeat center center;
+        background-size: 185px 166px;
+        opacity: .4;
+    }
+    
+    .page .receivedWrap .shuoming {
+        text-align: center;
+        margin: 0 auto;
+        margin-top: 20px;
+    }
+    
+    .page .receivedWrap .shuoming span {
+        background-color: #D70000;
+        color: white;
+        font-size: 16px;
+        padding: 0 10px;
+        margin: 0 auto;
+        font-weight: normal;
+        z-index: 999;
+        position: relative;
+    }
+    
+    .page .packetUserWrap {
+        position: relative;
+        padding-top: 10px;
+    }
+    
+    .page .packetUserWrap h3 {
+        font-size: 16px;
+        color: #000;
+        margin-bottom: 10px;
+    }
+    
+    .page .packetUser {
+        position: relative;
+    }
+    
+    .page .packetUser li {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: start;
+        -webkit-align-items: flex-start;
+        -ms-flex-align: start;
+        align-items: flex-start;
+        margin-bottom: .2rem;
+    }
+    
+    .page .packetUser .portrait {
+        display: block;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #d8d8d8;
+        border: 0 none;
+    }
+    
+    .page .packetUser .userInfo {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 0 .12rem;
+        -ms-flex: 1 0 .12rem;
+        flex: 1 0 .12rem;
+        padding-left: 10px;
+        word-break: break-all;
+    }
+    
+    .page .packetUser .userInfo .name {
+        font-size: 12px;
+        margin-top: 10px;
+        color: #000;
+    }
+    
+    .button {
+        width: 300px;
+        margin: 0 auto;
+        margin-top: 100px;
+        background: #D70000;
+        display: block;
+        height: 50px;
+        line-height: 50px;
+        font-size: 16px;
+        text-align: center;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .toast {
+        position: fixed;
+        z-index: 2000;
+        left: 50%;
+        top: 25%;
+        transition: all .5s;
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        -moz-transform: translateX(-50%) translateY(-50%);
+        -ms-transform: translateX(-50%) translateY(-50%);
+        -o-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        text-align: center;
+        border-radius: 5px;
+        color: #FFF;
+        background: rgba(17, 17, 17, 0.7);
+        height: 45px;
+        line-height: 45px;
+        padding: 0 15px;
+        width: 100%;
+    }
+    
+    .page .packetUser .userInfo .red {
+        color: red;
+    }
+</style>
+
+<body>
+    <div id="app" v-cloak>
+        <div class="toast" v-show="toastShow">
+            {{toastText}}
+        </div>
+        <div class="page">
+            <div class="receivedWrap">
+                <div class="shuoming">
+                    <span>
+						{{curLangule['key2']}}  {{nickName}}
+                    </span>
+                    <p v-if="des==='Too_late'" style="color:red;margin-top:10px;font-size: 21px;position: relative;
+                    z-index: 1;font-weight: bold;">{{curLangule['key8']}}</p>
+                    <p v-if="des==='Not_allowed'" style="color:red;margin-top:10px;font-size: 21px;position: relative;
+                     z-index: 1;font-weight: bold;">{{curLangule['key9']}}</p>
+                    <p v-if="amount" style="color:red;margin-top:10px;font-size: 21px;position: relative;
+                    z-index: 1;font-weight: bold;">{{amount}} ELA</p>
+                    <p v-if="firstGrab" style="color:#bcbcbc;margin-top:5px;font-size: 12px;position: relative;
+                    z-index: 1;">{{curLangule['key6']}}</p>
+                    <p v-if="!firstGrab&&amount" style="color:#bcbcbc;margin-top:5px;font-size: 12px;position: relative;
+                         z-index: 1;">{{curLangule['key7']}}</p>
+                </div>
+            </div>
+
+            <div class="packetUserWrap">
+                <h3>{{curLangule['key5']}}<span style="margin-left: 10px;">{{packetRcvNum}}/{{packetNum}}</span></h3>
+                <ul class="packetUser">
+                    <li v-for="(item) in  rcverDetails">
+                        <img class="portrait" :src="handleImg(item.address)" alt="">
+                        <div class="userInfo">
+                            <div class="name" :class="{red:item.address === address}">{{handleName(item)}}</div>
+                            <div class="elaCount">
+                                <span style="color:#bcbcbc;font-size: 12px;">
+								   {{dateFormat(new Date(item["time_stamp"]), ' yyyy-MM-dd HH:mm:ss')}}
+								</span>
+                                <span style="color:#bcbcbc;font-size: 12px;">{{item.amount}} ELA</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+
+            <!-- <div class="button" @click="sendRedPacket">
+                {{curLangule['key4']}}
+            </div> -->
+        </div>
+    </div>
+    </div>
+</body>
+<script src="./js/vue.min.js"></script>
+<script src="./js/lodash.min.js"></script>
+<script src="./js/vue-clipboard.min.js"></script>
+<script src="./js/jquery-3.2.1.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            loading: true,
+            zh: {
+                key: '红包',
+                key2: '红包来自',
+                key3: '复制成功',
+                key4: '发一个呗',
+                key5: '已抢',
+                key6: '你将在几分钟内收到红包',
+                key7: '你已经领取过一次啦',
+                key8: '你来晚啦！',
+                key9: '仅限投票者',
+            },
+            en: {
+                key: 'Red packet',
+                key2: 'Red Packet From',
+                key3: 'Copy Success',
+                key4: 'Send Red Packet',
+                key5: 'Opened',
+                key6: 'You will receive red packet in minutes',
+                key7: 'You have getted it once',
+                key8: 'Too late！',
+                key9: 'Voters only',
+            },
+            curLangule: {},
+            curLanguleKey: 'zh',
+            toastText: '',
+            toastShow: false,
+            nickName: '',
+            url: '',
+            isShow: false,
+            baseUrl: 'https://redpacket.elastos.org',
+            packHash: '',
+            packet_blessing: '',
+            packetNum: '',
+            packetRcvNum: '',
+            rcverDetails: [],
+            packetHash: '',
+            browserType: '',
+            amount: '',
+            firstGrab: '',
+            address: '',
+            des: '',
+        },
+        methods: {
+            handleImg(address) {
+                let arr = this.base58decode(address);
+                let num = arr[arr.length - 1];
+                return './images/' + num + '.png';
+            },
+            base58decode(string) {
+                let ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+                let ALPHABET_MAP = {};
+                let BASE = 58;
+                for (let k = 0; k < ALPHABET.length; k++) {
+                    ALPHABET_MAP[ALPHABET.charAt(k)] = k;
+                }
+
+                if (string.length === 0) return [];
+                let bytes = [0];
+                for (let i = 0; i < string.length; i++) {
+                    let c = string[i];
+                    // c是不是ALPHABET_MAP的key 
+                    // if (!(c in ALPHABET_MAP)) throw new Error('Non-base58 character');
+                    for (let j = 0; j < bytes.length; j++) bytes[j] *= BASE;
+                    bytes[0] += ALPHABET_MAP[c];
+                    let carry = 0;
+                    for (j = 0; j < bytes.length; ++j) {
+                        bytes[j] += carry;
+                        carry = bytes[j] >> 8;
+                        // 0xff --> 11111111
+                        bytes[j] &= 0xff;
+                    }
+                    while (carry) {
+                        bytes.push(carry & 0xff);
+                        carry >>= 8;
+                    }
+                }
+                // deal with leading zeros
+                for (i = 0; string[i] === '1' && i < string.length - 1; i++) bytes.push(0);
+                return bytes.reverse();
+            },
+            handleName(item) {
+                return item.name || item.address;
+            },
+            getAjax(url) {
+                return new Promise((resovle, reject) => {
+                    $.ajax({
+                        url: url,
+                        dataType: 'json',
+                        type: 'GET',
+                        success: function(data) { //成功回调函数
+                            resovle(data);
+                        },
+                        error: function(err) { //失败回调函数
+                            reject(err);
+                        }
+                    });
+                });
+            },
+            dateFormat(date, sFormat) {
+                let time = {
+                    Year: 0,
+                    TYear: '0',
+                    Month: 0,
+                    TMonth: '0',
+                    Day: 0,
+                    TDay: '0',
+                    Hour: 0,
+                    THour: '0',
+                    hour: 0,
+                    Thour: '0',
+                    Minute: 0,
+                    TMinute: '0',
+                    Second: 0,
+                    TSecond: '0',
+                    Millisecond: 0
+                };
+                time.Year = date.getFullYear();
+                time.TYear = String(time.Year).substr(2);
+                time.Month = date.getMonth() + 1;
+                time.TMonth = time.Month < 10 ? "0" + time.Month : String(time.Month);
+                time.Day = date.getDate();
+                time.TDay = time.Day < 10 ? "0" + time.Day : String(time.Day);
+                time.Hour = date.getHours();
+                time.THour = time.Hour < 10 ? "0" + time.Hour : String(time.Hour);
+                time.hour = time.Hour < 13 ? time.Hour : time.Hour - 12;
+                time.Thour = time.hour < 10 ? "0" + time.hour : String(time.hour);
+                time.Minute = date.getMinutes();
+                time.TMinute = time.Minute < 10 ? "0" + time.Minute : String(time.Minute);
+                time.Second = date.getSeconds();
+                time.TSecond = time.Second < 10 ? "0" + time.Second : String(time.Second);
+                time.Millisecond = date.getMilliseconds();
+
+                return sFormat.replace(/yyyy/ig, String(time.Year))
+                    .replace(/yyy/ig, String(time.Year))
+                    .replace(/yy/ig, time.TYear)
+                    .replace(/y/ig, time.TYear)
+                    .replace(/MM/g, time.TMonth)
+                    .replace(/M/g, String(time.Month))
+                    .replace(/dd/ig, time.TDay)
+                    .replace(/d/ig, String(time.Day))
+                    .replace(/HH/g, time.THour)
+                    .replace(/H/g, String(time.Hour))
+                    .replace(/hh/g, time.Thour)
+                    .replace(/h/g, String(time.hour))
+                    .replace(/mm/g, time.TMinute)
+                    .replace(/m/g, String(time.Minute))
+                    .replace(/ss/ig, time.TSecond)
+                    .replace(/s/ig, String(time.Second))
+                    .replace(/fff/ig, String(time.Millisecond))
+            },
+            sendRedPacket() {
+                location.href = "./index.html?browser=" + this.browserType;
+            },
+            getList() {
+                let url = this.baseUrl + '/api/v1/packet/peek?packet_hash=' + this.packHash + '&show_receivers=true';
+                this.getAjax(url).then((res) => {
+                    if (res.status === 200) {
+                        let data = res["result"]["packet_detail"];
+                        this.nickName = data["packet_creator"];
+                        this.packetNum = data["packet_num"];
+                        this.packetRcvNum = data["packet_rcv_num"];
+                        this.rcverDetails = data["packet_rcver_details"] || [];
+
+                        this.rcverDetails = _.sortBy(this.rcverDetails, function(item) {
+                            return -item["time_stamp"];
+                        });
+                    }
+                }).catch(() => {
+
+                });
+            },
+            doCopy(url) {
+                var v = this;
+                this.$copyText(url).then(function(e) {
+                    v.toast(v.curLangule['key4']);
+                }, function(e) {})
+            },
+            toast(str) {
+                var v = this;
+                v.toastText = str
+                v.toastShow = true
+                setTimeout(function() {
+                    v.toastShow = false;
+                }, 1500)
+            },
+            getLanugle: function() {
+                this.curLangule = this.en;
+                this.curLanguleKey = 'en';
+                var JsSrc = (navigator.language || navigator.browserLanguage).toLowerCase();
+                if (JsSrc.indexOf('zh') >= 0) {
+                    // 假如浏览器语言是中文
+                    this.curLanguleKey = 'zh';
+                    this.curLangule = this.zh;
+                } else if (JsSrc.indexOf('en') >= 0) {
+                    this.curLangule = this.en;
+                    this.curLanguleKey = 'en';
+                } else {
+                    // 假如浏览器语言是其它语言
+                    this.curLangule = this.en;
+                    this.curLanguleKey = 'en';
+                }
+            },
+            GetQueryString(name) {　　　
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                var r = window.location.search.substr(1).match(reg);　　　
+                if (r != null) return (r[2]);　　　
+                return null;
+            }
+        },
+        created() {
+            this.packHash = this.GetQueryString("packHash") || "";
+            this.browserType = this.GetQueryString("browser") || "";
+            this.amount = this.GetQueryString("amount") || "";
+            this.firstGrab = this.GetQueryString("firstGrab") || "";
+            this.address = this.GetQueryString("address") || "";
+            this.des = this.GetQueryString("des") || "";
+            this.getList();
+        },
+        mounted() {
+            this.getLanugle();
+            document.title = this.curLangule["key"];
+        }
+    });
+</script>
+
+</html>

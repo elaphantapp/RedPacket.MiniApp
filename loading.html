@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script src="./js/fingerprint2.js"></script>
+</head>
+<style type="text/css">
+    body {
+        background: #F2F9FF;
+    }
+    
+    .xiaoshuo {
+        cursor: pointer;
+    }
+    
+    .xiaoshuo {
+        cursor: pointer;
+    }
+    
+    .spinner {
+        display: block;
+        margin: 100px auto 0;
+        width: 150px;
+        text-align: center;
+    }
+    
+    .spinner>div {
+        width: 30px;
+        height: 30px;
+        background-color: #67CF22;
+        border-radius: 100%;
+        display: inline-block;
+        -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+        animation: bouncedelay 1.4s infinite ease-in-out;
+        /* Prevent first frame from flickering when animation starts */
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+    }
+    
+    .spinner .bounce1 {
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s;
+    }
+    
+    .spinner .bounce2 {
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s;
+    }
+    
+    @-webkit-keyframes bouncedelay {
+        0%,
+        80%,
+        100% {
+            -webkit-transform: scale(0.0)
+        }
+        40% {
+            -webkit-transform: scale(1.0)
+        }
+    }
+    
+    @keyframes bouncedelay {
+        0%,
+        80%,
+        100% {
+            transform: scale(0.0);
+            -webkit-transform: scale(0.0);
+        }
+        40% {
+            transform: scale(1.0);
+            -webkit-transform: scale(1.0);
+        }
+    }
+    
+    .four {
+        position: fixed;
+        width: 300px;
+        margin: 0px auto;
+        left: 0;
+        right: 0;
+        top: 107px;
+        z-index: 999;
+    }
+    
+    .four .whole {
+        display: inline-block;
+        width: 280px;
+        font-family: Bio Sans;
+        font-size: 16px;
+        text-align: center;
+        color: #ffffff;
+        height: 48px;
+        line-height: 48px;
+        background: #D70000;
+        border-radius: 200px;
+    }
+    
+    .four .left {
+        display: inline-block;
+        width: 130px;
+        margin-right: 15px;
+        font-family: Bio Sans;
+        font-size: 16px;
+        text-align: center;
+        color: #ffffff;
+        height: 48px;
+        line-height: 48px;
+        background: #D70000;
+        border-radius: 200px;
+    }
+    
+    .four .right {
+        display: inline-block;
+        width: 130px;
+        margin-left: 15px;
+        font-family: Bio Sans;
+        font-size: 16px;
+        text-align: center;
+        color: #ffffff;
+        height: 48px;
+        line-height: 48px;
+        background: #D70000;
+        border-radius: 200px;
+    }
+    
+    .toast {
+        position: fixed;
+        z-index: 2000;
+        left: 50%;
+        top: 25%;
+        transition: all .5s;
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        -moz-transform: translateX(-50%) translateY(-50%);
+        -ms-transform: translateX(-50%) translateY(-50%);
+        -o-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        text-align: center;
+        border-radius: 5px;
+        color: #FFF;
+        background: rgba(17, 17, 17, 0.7);
+        height: 45px;
+        line-height: 45px;
+        padding: 0 15px;
+        width: 100%;
+    }
+    
+    [v-cloak] {
+        display: none;
+    }
+</style>
+
+<body>
+    <div id="app" v-cloak>
+        <div class="toast" v-show="toastShow">
+            {{toastText}}
+        </div>
+        <div class="spinner" v-if="loading">
+
+            <div class="bounce1"></div>
+
+            <div class="bounce2"></div>
+
+            <div class="bounce3"></div>
+        </div>
+
+        <div style="text-align:center;" v-if="loading">{{curLangule['key3']}}</div>
+        <!-- <div style="text-align:center;margin-top: 50px;" v-if="!loading&&des==='Too_late'">{{des}}</div>
+        <div class="four" v-if="!loading&&des==='Too_late'">
+            <span @click="back" class="whole">
+                {{curLangule['key1']}}
+            </span>
+        </div> -->
+    </div>
+</body>
+<script>
+    // var fingerprintReport = function() {
+    //     var d1 = new Date()
+    //     Fingerprint2.get(function(components) {
+    //         window.murmur = Fingerprint2.x64hash128(components.map(function(pair) {
+    //             return pair.value
+    //         }).join(), 31);
+    //     })
+    // }
+    window.$Fingerprint2 = Fingerprint2;
+</script>
+<script src="./js/vue.min.js"></script>
+<script src="./js/jquery-3.2.1.min.js"></script>
+<script src="./js/lodash.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            loading: true,
+            zh: {
+                key: '红包',
+                key1: '返回',
+                key2: '你来晚啦！',
+                key3: '红包领取中......'
+            },
+            en: {
+                key: 'Red packet',
+                key1: 'Back',
+                key2: 'Too late！',
+                key3: 'The red packet is being getted......'
+            },
+            curLangule: {},
+            toastText: "",
+            toastShow: false,
+            packetHash: '',
+            address: '',
+            nickName: '',
+            browserType: '',
+            baseUrl: 'https://redpacket.elastos.org',
+            des: ''
+        },
+        methods: {
+            back() {
+                location.href = "./index.html?browser=" + this.browserType;
+            },
+            getRedPacket(murmur) {
+                this.loading = true;
+                let url = this.baseUrl + "/api/v1/packet/grab?packet_hash=" + this.packetHash + "&address=" + this.address + "&name=" + this.nickName + "&uuid=" + murmur;
+                this.getAjax(url).then((res) => {
+                    if (res.status === 200) {
+                        this.loading = false;
+                        this.des = res['result']['desc'];
+                        if (this.des == 'Not_allowed') {
+                            location.href = "./redPacket-details.html?packHash=" + this.packetHash + "&browser=" + this.browserType + "&des=" + this.des;
+                        } else if (this.des != 'Too_late') {
+                            let amount = res['result']["amount"];
+                            let firstGrab = res['result']['first_grab'] || '';
+                            location.href = "./redPacket-details.html?packHash=" + this.packetHash + "&browser=" + this.browserType + '&amount=' + amount + "&firstGrab=" + firstGrab + '&address=' + this.address;
+                        } else {
+                            location.href = "./redPacket-details.html?packHash=" + this.packetHash + "&browser=" + this.browserType + "&des=" + this.des;
+                        }
+                    } else {
+                        this.toast(JSON.stringify(res));
+                        this.loading = false;
+                    }
+                }).catch((err) => {
+                    this.loading = false;
+                    this.des = JSON.stringify(err);
+                });
+            },
+            getAjax(url) {
+                return new Promise((resovle, reject) => {
+                    $.ajax({
+                        url: url,
+                        dataType: 'json',
+                        type: 'GET',
+                        success: function(data) { //成功回调函数
+                            resovle(data);
+                        },
+                        error: function(err) { //失败回调函数
+                            reject(err);
+                        }
+                    });
+                });
+            },
+            toast(str) {
+                var v = this;
+                v.toastText = str
+                v.toastShow = true
+                setTimeout(function() {
+                    v.toastShow = false;
+                }, 1500)
+            },
+            GetQueryString(name) {　　　
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                var r = window.location.search.substr(1).match(reg);　　　
+                if (r != null) return (r[2]);　　　
+                return null;
+            },
+            getLanugle: function() {
+                this.curLangule = this.en;
+                this.curLanguleKey = 'en';
+                var JsSrc = (navigator.language || navigator.browserLanguage).toLowerCase();
+                if (JsSrc.indexOf('zh') >= 0) {
+                    // 假如浏览器语言是中文
+                    this.curLanguleKey = 'zh';
+                    this.curLangule = this.zh;
+                } else if (JsSrc.indexOf('en') >= 0) {
+                    this.curLangule = this.en;
+                    this.curLanguleKey = 'en';
+                } else {
+                    // 假如浏览器语言是其它语言
+                    this.curLangule = this.en;
+                    this.curLanguleKey = 'en';
+                }
+            }
+        },
+        created: function() {
+            this.packetHash = this.GetQueryString("packHash") || "";
+            this.browserType = this.GetQueryString("browser") || "";
+            let data = this.GetQueryString("Data") || "";
+            if (data != '') {
+                data = JSON.parse(decodeURIComponent(data));
+                this.address = data['ELAAddress'];
+                this.nickName = data['Nickname'] || data['ELAAddress'];
+            } else {
+                this.address = this.GetQueryString("address") || "";
+                this.nickName = this.address;
+            }
+            window.$Fingerprint2.get((components) => {
+                let murmur = Fingerprint2.x64hash128(components.map(function(pair) {
+                    return pair.value
+                }).join(), 31);
+                this.getRedPacket(murmur);
+            });
+        },
+        mounted() {
+            this.getLanugle();
+            document.title = this.curLangule["key"];
+        }
+    });
+</script>
+
+</html>
