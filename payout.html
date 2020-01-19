@@ -135,6 +135,7 @@
             <div style="margin-top: 100px;">
                 <p class="tip">{{curLangule['key2']}}</p>
                 <span class="button" @click="goCharge">{{curLangule['key1']}}</span>
+                <p style="color:red;font-size:12px;text-align: center;margin-top:5px;">{{curLangule['key3']}}</p>
             </div>
         </div>
     </div>
@@ -150,12 +151,14 @@
             zh: {
                 key: '红包',
                 key1: '充值',
-                key2: '等待充值'
+                key2: '等待充值',
+                key3: '未领取的红包在24小时后退还  到支付地址。'
             },
             en: {
                 key: 'Red packet',
                 key1: 'Recharge',
-                key2: 'Waiting for deposit'
+                key2: 'Waiting for deposit',
+                key3: 'The unreceived red packet will be returned to the payment address 24 hours later.'
             },
             curLangule: {},
             curLanguleKey: 'zh',
